@@ -26,4 +26,13 @@ void AItem::BeginPlay()
 void AItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
+	UE_LOG(LogTemp, Warning, TEXT("Ticket - DeltaTime: %f"), DeltaTime);
+	
+	if (GEngine)
+	{
+		FString Name = GetName();
+		FString Message = FString::Printf(TEXT("DeltaTime: %s"), *Name);
+		GEngine->AddOnScreenDebugMessage(1, 60.f, FColor::Red, Message);
+	}
 }
