@@ -15,6 +15,7 @@ void AItem::BeginPlay()
 	Super::BeginPlay();
 	
 	SetActorLocation(FVector(0.f, 0.f, 150.f));
+	SetActorRotation(FRotator(0.f, 45.f, 0.f), ETeleportType::TeleportPhysics);
 	
 	UWorld* World = GetWorld();
 	FVector Location = GetActorLocation();
