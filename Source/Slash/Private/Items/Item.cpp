@@ -2,6 +2,8 @@
 
 
 #include "Items/Item.h"
+#include "Slash/Slash.h"
+
 
 AItem::AItem()
 {
@@ -12,6 +14,9 @@ AItem::AItem()
 void AItem::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	FVector Location = GetActorLocation();
+	DRAW_SPHERE(Location);
 
 	// Logging to Output-Log
 	UE_LOG(LogTemp, Warning, TEXT("BeginPlay"));
@@ -26,9 +31,9 @@ void AItem::BeginPlay()
 void AItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
+
 	UE_LOG(LogTemp, Warning, TEXT("Ticket - DeltaTime: %f"), DeltaTime);
-	
+
 	if (GEngine)
 	{
 		FString Name = GetName();
