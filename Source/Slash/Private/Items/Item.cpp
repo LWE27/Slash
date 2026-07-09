@@ -13,22 +13,20 @@ AItem::AItem()
 void AItem::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	SetActorLocation(FVector(0.f, 0.f, 150.f));
-	SetActorRotation(FRotator(0.f, 45.f, 0.f), ETeleportType::TeleportPhysics);
-	
-	UWorld* World = GetWorld();
-	FVector Location = GetActorLocation();
-	FVector ForwardVector = GetActorForwardVector();
-
-	DRAW_SPHERE(Location);
-	// DRAW_LINE(Location, Location + ForwardVector * 100.f);
-	// DRAW_POINT(Location + ForwardVector * 100.f);
-
-	DRAW_VECTOR(Location, Location + ForwardVector * 100.f);
 }
 
 void AItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
+	// 50 cm/s
+	float MovementSpeed = 50.0f;
+	// 45°/s
+	float RotationSpeed = 45.0f;
+	
+	//Every frame 1 gets added to actors x value
+	AddActorWorldOffset(FVector(MovementSpeed, 0.f, 0.f) * DeltaTime);
+	AddActorWorldRotation(FRotator(0.f, RotationSpeed, 0.f) * DeltaTime);
+	DRAW_SPHERE_SingleFrame(GetActorLocation());
+	DRAW_VECTOR_SingleFrame(GetActorLocation(), GetActorLocation() + GetActorForwardVector() * 100.f);
 }
