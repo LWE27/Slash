@@ -5,14 +5,22 @@
 
 AItem::AItem()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 void AItem::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// Logging to Output-Log
+	UE_LOG(LogTemp, Warning, TEXT("BeginPlay"));
+
+	//Log to Screen
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(1, 60.f, FColor::Red, FString("Screen Message!"));
+	}
 }
 
 void AItem::Tick(float DeltaTime)
