@@ -18,15 +18,13 @@ void AItem::BeginPlay()
 void AItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	RunningTime += DeltaTime; // Kinda like a stopwatch
+	// Amplitude Height .25f & Speed 5.f
+	float DeltaZ = Amplitude * FMath::Sin(RunningTime * TimeConstant);
 	
-	// 50 cm/s
-	float MovementSpeed = 50.0f;
-	// 45°/s
-	float RotationSpeed = 45.0f;
+	AddActorWorldOffset(FVector(0.0f, 0.0f, DeltaZ));
 	
-	//Every frame 1 gets added to actors x value
-	AddActorWorldOffset(FVector(MovementSpeed, 0.f, 0.f) * DeltaTime);
-	AddActorWorldRotation(FRotator(0.f, RotationSpeed, 0.f) * DeltaTime);
 	DRAW_SPHERE_SingleFrame(GetActorLocation());
 	DRAW_VECTOR_SingleFrame(GetActorLocation(), GetActorLocation() + GetActorForwardVector() * 100.f);
 }
