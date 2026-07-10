@@ -7,6 +7,10 @@ ABird::ABird()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	Capsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleCollision"));
+	Capsule->SetCapsuleHalfHeight(20.f);
+	Capsule->SetCapsuleRadius(15.f);
+	SetRootComponent(Capsule); // Safe variant ; Same as RootComponent = Capsule
 }
 
 void ABird::BeginPlay()
