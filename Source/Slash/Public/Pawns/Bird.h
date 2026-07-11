@@ -3,9 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "InputActionValue.h"
 #include "GameFramework/Pawn.h"
 #include "Bird.generated.h"
 
+class UInputAction;
+class UInputMappingContext;
 class UCapsuleComponent;
 class USkeletalMeshComponent;
 
@@ -24,11 +27,19 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	
+	void Move(const FInputActionValue& Value);
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
+	UInputMappingContext* BirdMappingContext;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
+	UInputAction* MoveAction;
 
 private:
 	UPROPERTY(VisibleAnywhere)
 	UCapsuleComponent* Capsule;
-	
+
 	UPROPERTY(VisibleAnywhere)
 	USkeletalMeshComponent* BirdMesh;
 };
