@@ -31,12 +31,17 @@ protected:
 	virtual void BeginPlay() override;
 	
 	void Move(const FInputActionValue& Value);
+	
+	void Look(const FInputActionValue& Value);
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputMappingContext* BirdMappingContext;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputAction* MoveAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
+	UInputAction* LookAction;
 
 private:
 	UPROPERTY(VisibleAnywhere)
@@ -50,4 +55,5 @@ private:
 	
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* ViewCamera;
+	
 };
