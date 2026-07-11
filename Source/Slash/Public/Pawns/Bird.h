@@ -7,6 +7,8 @@
 #include "GameFramework/Pawn.h"
 #include "Bird.generated.h"
 
+class UCameraComponent;
+class USpringArmComponent;
 class UInputAction;
 class UInputMappingContext;
 class UCapsuleComponent;
@@ -42,4 +44,10 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	USkeletalMeshComponent* BirdMesh;
+	
+	UPROPERTY(VisibleAnywhere)
+	USpringArmComponent* SpringArm;
+	
+	UPROPERTY(VisibleAnywhere)
+	UCameraComponent* ViewCamera;
 };

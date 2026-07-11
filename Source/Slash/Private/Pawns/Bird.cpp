@@ -7,6 +7,8 @@
 #include "EnhancedInputComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Camera/CameraComponent.h"
 
 ABird::ABird()
 {
@@ -19,6 +21,13 @@ ABird::ABird()
 
 	BirdMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("BirdMesh"));
 	BirdMesh->SetupAttachment(GetRootComponent());
+	
+	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
+	SpringArm->SetupAttachment(GetRootComponent());
+	SpringArm->TargetArmLength = 300.f;
+	
+	ViewCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("ViewCamera"));
+	ViewCamera->SetupAttachment(SpringArm);
 
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 }
@@ -38,9 +47,14 @@ void ABird::BeginPlay()
 
 void ABird::Move(const FInputActionValue& Value)
 {
-	if (const bool CurrentValue = Value.Get<bool>())
+	const float DirectionValue = Value.Get<float>();
+	
+	if ((DirectionValue != 0.f) && GetController())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("IA_Move forward"));
+		UE_LOG(LogTemp, Warning, TEXT("IA_Move forward. DirectionValue: %f"), DirectionValue);
+		
+		FVector ForwardVector = GetActorForwardVector();
+		AddMovementInput(ForwardVector, DirectionValue);
 	}
 }
 
