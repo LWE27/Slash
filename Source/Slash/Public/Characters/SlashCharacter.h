@@ -9,6 +9,8 @@
 
 class UInputMappingContext;
 class UInputAction;
+class UCameraComponent;
+class USpringArmComponent;
 
 UCLASS()
 class SLASH_API ASlashCharacter : public ACharacter
@@ -32,6 +34,20 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* MovementInputAction;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= "Input")
+	UInputAction* LookInputAction; 
+	
 	/* Input Functions */
 	void Move(const FInputActionValue& Value);
+	
+	void Look(const FInputActionValue& Value);
+	
+private:
+	
+	UPROPERTY(VisibleAnywhere)
+	USpringArmComponent* SpringArm;
+	
+	UPROPERTY(VisibleAnywhere)
+	UCameraComponent* ViewCamera;
+	
 };

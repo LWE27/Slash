@@ -3,12 +3,21 @@
 #include "Components/InputComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Camera/CameraComponent.h"
 
 // Sets default values
 ASlashCharacter::ASlashCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
+	SpringArm->SetupAttachment(GetRootComponent());
+	SpringArm->TargetArmLength = 300.f;
+	SpringArm->bUsePawnControlRotation = true; // Kamera/SpringArm um Charakter drehen, ohen dass dieser sich mitbewegt
+	
+	ViewCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("ViewCamera"));
+	ViewCamera->SetupAttachment(SpringArm);
 }
 
 void ASlashCharacter::BeginPlay()
@@ -35,6 +44,17 @@ void ASlashCharacter::Move(const FInputActionValue& Value)
 	AddMovementInput(Right, MovementVector.X);
 }
 
+void ASlashCharacter::Look(const FInputActionValue& Value)
+{
+	const FVector2D LookAxisVector = Value.Get<FVector2D>();
+
+	UE_LOG(LogTemp, Warning, TEXT("Look axis X: %f"), LookAxisVector.X);
+	UE_LOG(LogTemp, Warning, TEXT("Look axis Y: %f"), LookAxisVector.Y);
+	
+	AddControllerPitchInput(LookAxisVector.Y);
+	AddControllerYawInput(LookAxisVector.X);
+}
+
 void ASlashCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -48,6 +68,7 @@ void ASlashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		EnhancedInputComponent->BindAction(MovementInputAction, ETriggerEvent::Triggered, this, &ASlashCharacter::Move);
+		EnhancedInputComponent->BindAction(LookInputAction, ETriggerEvent::Triggered, this, &ASlashCharacter::Look);
 	}
 }
 
