@@ -38,10 +38,16 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= "Input")
 	UInputAction* LookInputAction; 
 	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= "Input")
+	UInputAction* JumpInputAction; 
+	
 	/* Input Functions */
 	void Move(const FInputActionValue& Value);
 	
 	void Look(const FInputActionValue& Value);
+	
+	// Jump Function inherited from ACharacter
+	virtual void Jump() override;
 	
 private:
 	
