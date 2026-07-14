@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ECS_CharacterStates.h"
 #include "GameFramework/Character.h"
 #include  "InputActionValue.h"
 #include "SlashCharacter.generated.h"
@@ -56,6 +57,9 @@ protected:
 	// Jump Function inherited from ACharacter
 	virtual void Jump() override;
 	
+	// Default CharacterState
+	ECharacterState CharacterState = ECharacterState::ECS_Unequipped;
+	
 private:
 	
 	UPROPERTY(VisibleAnywhere)
@@ -76,6 +80,8 @@ private:
 public:
 	FORCEINLINE AItem* GetOverlappingItem() const { return OverlappingItem; }
 
+	FORCEINLINE ECharacterState GetCharacterState() const { return CharacterState; }
+	
 	FORCEINLINE void SetOverlappingItem(AItem* InOverlappingItem)
 	{
 		this->OverlappingItem = InOverlappingItem;
