@@ -3,6 +3,7 @@
 
 #include "Items/Item.h"
 
+#include "Characters/SlashCharacter.h"
 #include "Components/SphereComponent.h"
 
 AItem::AItem()
@@ -42,10 +43,10 @@ float AItem::TransformedCos()
 void AItem::OnSphereOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	const FString Name = OtherActor->GetName();
-	if (GEngine)
+	if (ASlashCharacter* SlashCharacter = Cast<ASlashCharacter>(OtherActor))
 	{
-		GEngine->AddOnScreenDebugMessage(1, 30.f, FColor::Green, Name);
+		// Setze Pointer, sobald Charakter innerhalb der Sphere ist und es dadurch aufheben kann
+		SlashCharacter->SetOverlappingItem(this);
 	}
 }
 
@@ -53,10 +54,10 @@ void AItem::OnSphereOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherAc
 void AItem::OnSphereOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
 	class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	const FString Name = OtherActor->GetName();
-	if (GEngine)
+	if (ASlashCharacter* SlashCharacter = Cast<ASlashCharacter>(OtherActor))
 	{
-		GEngine->AddOnScreenDebugMessage(1, 30.f, FColor::Blue, Name);
+		// Lösche Pointer, sobald Charakter außerhalb der Sphere ist und es dadurch nicht mehr aufheben kann
+		SlashCharacter->SetOverlappingItem(nullptr);
 	}
 }
 

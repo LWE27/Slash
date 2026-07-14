@@ -7,6 +7,7 @@
 #include  "InputActionValue.h"
 #include "SlashCharacter.generated.h"
 
+class AItem;
 class UInputMappingContext;
 class UInputAction;
 class UCameraComponent;
@@ -41,10 +42,16 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= "Input")
 	UInputAction* JumpInputAction; 
 	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= "Input")
+	UInputAction* IA_EKeyPressed;
+	
 	/* Input Functions */
 	void Move(const FInputActionValue& Value);
 	
 	void Look(const FInputActionValue& Value);
+	
+	// Jump Function inherited from ACharacter
+	void EKeyPressed(const FInputActionValue& Value);	
 	
 	// Jump Function inherited from ACharacter
 	virtual void Jump() override;
@@ -62,4 +69,15 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = Hair)
 	UGroomComponent* Eyebrows;
+	
+	UPROPERTY(VisibleInstanceOnly)
+	AItem* OverlappingItem;
+
+public:
+	FORCEINLINE AItem* GetOverlappingItem() const { return OverlappingItem; }
+
+	FORCEINLINE void SetOverlappingItem(AItem* InOverlappingItem)
+	{
+		this->OverlappingItem = InOverlappingItem;
+	}
 };

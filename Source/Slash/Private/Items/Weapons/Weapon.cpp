@@ -5,20 +5,20 @@
 
 #include "Characters/SlashCharacter.h"
 
+void AWeapon::Equip(USceneComponent* InParent, FName InSocketName)
+{
+	FAttachmentTransformRules TransformRules(EAttachmentRule::SnapToTarget, true);
+	ItemMesh->AttachToComponent(InParent, TransformRules, InSocketName);
+}
+
 void AWeapon::OnSphereOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
                               int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	Super::OnSphereOverlap(OverlappedComp, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
-	
-	if (ASlashCharacter* Character = Cast<ASlashCharacter>(OtherActor))
-	{
-		FAttachmentTransformRules TransformRules(EAttachmentRule::SnapToTarget, true);
-		ItemMesh->AttachToComponent(Character->GetMesh(), TransformRules, FName("RightHandSocket"));
-	}
 }
 
 void AWeapon::OnSphereOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+                                 UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	Super::OnSphereOverlapEnd(OverlappedComp, OtherActor, OtherComp, OtherBodyIndex);
 }

@@ -55,7 +55,7 @@ private:
 };
 
 template <typename T>
-inline T AItem::Avg(T First, T Second)
+T AItem::Avg(T First, T Second)
 {
 	return (First + Second) / 2;
 }
