@@ -27,6 +27,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Sine Parameters")
 	float TimeConstant = 5.f;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly) // Add it to the reflection system
+	UStaticMeshComponent* ItemMesh;
 
 	UFUNCTION(BlueprintPure)
 	float TransformedSin();
@@ -46,9 +49,6 @@ protected:
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	float RunningTime;
-	
-	UPROPERTY(VisibleAnywhere) // Add it to the reflection system
-	UStaticMeshComponent* ItemMesh;
 	
 	UPROPERTY(VisibleAnywhere)
 	USphereComponent* Sphere;
