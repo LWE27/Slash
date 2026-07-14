@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
-#include "SlashAnimInstance.generated.h"
 #include "ECS_CharacterStates.h"
+#include "SlashAnimInstance.generated.h"
 
 /**
  * 
@@ -34,5 +34,6 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category=Movement) // Zeigt Variable links bei den BPs an
 	bool IsFalling;
 	
+	UPROPERTY(BlueprintReadOnly, Category="Movement | Character State")
 	ECharacterState CharacterState;
 };
