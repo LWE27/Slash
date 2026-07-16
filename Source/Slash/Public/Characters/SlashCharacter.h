@@ -46,13 +46,17 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= "Input")
 	UInputAction* IA_EKeyPressed;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= "Input")
+	UInputAction* AttackInputAction;
+	
 	/* Input Functions */
 	void Move(const FInputActionValue& Value);
 	
 	void Look(const FInputActionValue& Value);
 	
-	// Jump Function inherited from ACharacter
 	void EKeyPressed(const FInputActionValue& Value);	
+	
+	void Attack(const FInputActionValue& Value);	
 	
 	// Jump Function inherited from ACharacter
 	virtual void Jump() override;

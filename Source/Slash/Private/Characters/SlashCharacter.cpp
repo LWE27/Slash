@@ -82,6 +82,11 @@ void ASlashCharacter::EKeyPressed(const FInputActionValue& Value)
 	}
 }
 
+void ASlashCharacter::Attack(const FInputActionValue& Value)
+{
+	UE_LOG(LogTemp, Display, TEXT("Attacking"));
+}
+
 void ASlashCharacter::Jump()
 {
 	Super::Jump();
@@ -102,6 +107,7 @@ void ASlashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		EnhancedInputComponent->BindAction(LookInputAction, ETriggerEvent::Triggered, this, &ASlashCharacter::Look);
 		EnhancedInputComponent->BindAction(JumpInputAction, ETriggerEvent::Started, this, &ASlashCharacter::Jump);
 		EnhancedInputComponent->BindAction(IA_EKeyPressed, ETriggerEvent::Started, this, &ASlashCharacter::EKeyPressed);
+		EnhancedInputComponent->BindAction(AttackInputAction, ETriggerEvent::Started, this, &ASlashCharacter::Attack);
 	}
 }
 
