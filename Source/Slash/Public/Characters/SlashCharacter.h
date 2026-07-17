@@ -14,6 +14,7 @@ class UInputAction;
 class UCameraComponent;
 class USpringArmComponent;
 class UGroomComponent;
+class UAnimMontage;
 
 UCLASS()
 class SLASH_API ASlashCharacter : public ACharacter
@@ -80,7 +81,11 @@ private:
 	
 	UPROPERTY(VisibleInstanceOnly)
 	AItem* OverlappingItem;
-
+	
+	/* Animation Montages */
+	UPROPERTY(EditDefaultsOnly, Category=Montages)
+	UAnimMontage* AttackMontage;
+	
 public:
 	FORCEINLINE AItem* GetOverlappingItem() const { return OverlappingItem; }
 

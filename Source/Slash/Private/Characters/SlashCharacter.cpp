@@ -8,16 +8,17 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GroomComponent.h"
 #include "Items/Weapons/Weapon.h"
+#include "Animation/AnimMontage.h"
 
 // Sets default values
 ASlashCharacter::ASlashCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	
+
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
 	bUseControllerRotationYaw = false;
-	
+
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 400.0f, 0.0f);
 
@@ -25,10 +26,10 @@ ASlashCharacter::ASlashCharacter()
 	SpringArm->SetupAttachment(GetRootComponent());
 	SpringArm->TargetArmLength = 300.f;
 	SpringArm->bUsePawnControlRotation = true; // Kamera/SpringArm um Charakter drehen, ohen dass dieser sich mitbewegt
-	
+
 	ViewCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("ViewCamera"));
 	ViewCamera->SetupAttachment(SpringArm);
-	
+
 	HairGroom = CreateDefaultSubobject<UGroomComponent>(TEXT("HairGroom"));
 	HairGroom->SetupAttachment(GetMesh());
 	HairGroom->AttachmentName = FString("head");
@@ -41,10 +42,11 @@ ASlashCharacter::ASlashCharacter()
 void ASlashCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<
+			UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
 			Subsystem->AddMappingContext(SlashInputMappingContext, 0);
 		}
@@ -54,13 +56,13 @@ void ASlashCharacter::BeginPlay()
 void ASlashCharacter::Move(const FInputActionValue& Value)
 {
 	const FVector2D MovementVector = Value.Get<FVector2D>();
-	
+
 	const FRotator Rotation = Controller->GetControlRotation();
 	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
-	
+
 	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 	AddMovementInput(ForwardDirection, MovementVector.Y);
-	
+
 	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 	AddMovementInput(RightDirection, MovementVector.X);
 }
@@ -68,7 +70,7 @@ void ASlashCharacter::Move(const FInputActionValue& Value)
 void ASlashCharacter::Look(const FInputActionValue& Value)
 {
 	const FVector2D LookAxisVector = Value.Get<FVector2D>();
-	
+
 	AddControllerPitchInput(LookAxisVector.Y);
 	AddControllerYawInput(LookAxisVector.X);
 }
@@ -85,6 +87,31 @@ void ASlashCharacter::EKeyPressed(const FInputActionValue& Value)
 void ASlashCharacter::Attack(const FInputActionValue& Value)
 {
 	UE_LOG(LogTemp, Display, TEXT("Attacking"));
+
+	if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance())
+	{
+		if (AttackMontage)
+		{
+			// Play Montage
+			AnimInstance->Montage_Play(AttackMontage);
+			// Generate Random Number to select played montage
+			int32 Selection = FMath::RandRange(0, 1);
+
+			FName SectionName = FName();
+			switch (Selection)
+			{
+			case 0:
+				SectionName = FName("Attack 1");
+				break;
+			case 1:
+				SectionName = FName("Attack 2");
+				break;
+			default:
+				break;
+			}
+			AnimInstance->Montage_JumpToSection(SectionName, AttackMontage);
+		}
+	}
 }
 
 void ASlashCharacter::Jump()
@@ -100,7 +127,7 @@ void ASlashCharacter::Tick(float DeltaTime)
 void ASlashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	
+
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		EnhancedInputComponent->BindAction(MovementInputAction, ETriggerEvent::Triggered, this, &ASlashCharacter::Move);
@@ -110,4 +137,3 @@ void ASlashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		EnhancedInputComponent->BindAction(AttackInputAction, ETriggerEvent::Started, this, &ASlashCharacter::Attack);
 	}
 }
-
