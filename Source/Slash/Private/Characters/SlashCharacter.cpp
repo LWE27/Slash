@@ -88,6 +88,20 @@ void ASlashCharacter::Attack(const FInputActionValue& Value)
 {
 	UE_LOG(LogTemp, Display, TEXT("Attacking"));
 
+	if (ActionState == EActionState::EAS_Unoccupied)
+	{
+		PlayAttackMontage();
+		ActionState = EActionState::EAS_Attacking;
+	}
+}
+
+void ASlashCharacter::Jump()
+{
+	Super::Jump();
+}
+
+void ASlashCharacter::PlayAttackMontage()
+{
 	if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance())
 	{
 		if (AttackMontage)
@@ -95,7 +109,7 @@ void ASlashCharacter::Attack(const FInputActionValue& Value)
 			// Play Montage
 			AnimInstance->Montage_Play(AttackMontage);
 			// Generate Random Number to select played montage
-			int32 Selection = FMath::RandRange(0, 1);
+			const int32 Selection = FMath::RandRange(0, 1);
 
 			FName SectionName = FName();
 			switch (Selection)
@@ -112,11 +126,6 @@ void ASlashCharacter::Attack(const FInputActionValue& Value)
 			AnimInstance->Montage_JumpToSection(SectionName, AttackMontage);
 		}
 	}
-}
-
-void ASlashCharacter::Jump()
-{
-	Super::Jump();
 }
 
 void ASlashCharacter::Tick(float DeltaTime)

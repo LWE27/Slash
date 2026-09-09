@@ -31,7 +31,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	
-	/* Inputs */
+	/* Input Actions */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputMappingContext* SlashInputMappingContext;  
 	
@@ -64,7 +64,12 @@ protected:
 	
 	// Default CharacterState
 	ECharacterState CharacterState = ECharacterState::ECS_Unequipped;
-	
+	EActionState ActionState = EActionState::EAS_Unoccupied;
+
+	/**
+	 * Play Montage Functions
+	*/
+	void PlayAttackMontage();
 private:
 	
 	UPROPERTY(VisibleAnywhere)
