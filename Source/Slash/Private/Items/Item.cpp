@@ -23,7 +23,7 @@ AItem::AItem()
 void AItem::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	// Bind callbacks to delegates
 	Sphere->OnComponentBeginOverlap.AddDynamic(this, &AItem::OnSphereOverlap);
 	Sphere->OnComponentEndOverlap.AddDynamic(this, &AItem::OnSphereOverlapEnd);
@@ -41,7 +41,7 @@ float AItem::TransformedCos()
 
 // Delegate Callback Function
 void AItem::OnSphereOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                            int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (ASlashCharacter* SlashCharacter = Cast<ASlashCharacter>(OtherActor))
 	{
@@ -52,7 +52,7 @@ void AItem::OnSphereOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherAc
 
 // Delegate Callback Function
 void AItem::OnSphereOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
-	class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+                               class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	if (ASlashCharacter* SlashCharacter = Cast<ASlashCharacter>(OtherActor))
 	{
@@ -66,4 +66,9 @@ void AItem::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	RunningTime += DeltaTime; // Kinda like a stopwatch
+
+	if (ItemState == EItemState::EIS_Hovering)
+	{
+		AddActorWorldOffset(FVector(0.f, 0.0f, TransformedSin()));
+	}
 }

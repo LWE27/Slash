@@ -9,6 +9,12 @@
 
 class USphereComponent;
 
+enum class EItemState : uint8
+{
+	EIS_Hovering,
+	EIS_Equipped
+};
+
 UCLASS()
 class SLASH_API AItem : public AActor
 {
@@ -20,6 +26,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 protected:
+	EItemState ItemState = EItemState::EIS_Hovering; // The current default state of the item
+	
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Sine Parameters")
