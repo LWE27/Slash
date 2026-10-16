@@ -64,14 +64,18 @@ protected:
 	
 	// Default CharacterState
 	ECharacterState CharacterState = ECharacterState::ECS_Unequipped;
+	UPROPERTY(BlueprintReadWrite, meta=( AllowPrivateAccess=true) )
 	EActionState ActionState = EActionState::EAS_Unoccupied;
 
 	/**
 	 * Play Montage Functions
 	*/
 	void PlayAttackMontage();
-private:
 	
+	UFUNCTION(BlueprintCallable)
+	void AttackEnd();
+	
+private:
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArm;
 	

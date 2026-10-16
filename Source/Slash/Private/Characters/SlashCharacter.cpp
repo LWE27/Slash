@@ -87,8 +87,10 @@ void ASlashCharacter::EKeyPressed(const FInputActionValue& Value)
 void ASlashCharacter::Attack(const FInputActionValue& Value)
 {
 	UE_LOG(LogTemp, Display, TEXT("Attacking"));
-
-	if (ActionState == EActionState::EAS_Unoccupied)
+	
+	const bool bCanAttack = ActionState == EActionState::EAS_Unoccupied && CharacterState != ECharacterState::ECS_Unequipped;
+	
+	if (bCanAttack)
 	{
 		PlayAttackMontage();
 		ActionState = EActionState::EAS_Attacking;
@@ -126,6 +128,12 @@ void ASlashCharacter::PlayAttackMontage()
 			AnimInstance->Montage_JumpToSection(SectionName, AttackMontage);
 		}
 	}
+}
+
+// Function will be called from the AnimationBlueprint in response to the AnimNotify
+void ASlashCharacter::AttackEnd()
+{
+	ActionState = EActionState::EAS_Unoccupied;
 }
 
 void ASlashCharacter::Tick(float DeltaTime)
