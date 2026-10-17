@@ -79,9 +79,24 @@ void ASlashCharacter::Look(const FInputActionValue& Value)
 
 void ASlashCharacter::EKeyPressed(const FInputActionValue& Value)
 {
+	// If weapon to pick up is nearby
 	if (AWeapon* OverlappingWeapon = Cast<AWeapon>(OverlappingItem))
 	{
 		OverlappingWeapon->Equip(GetMesh(), FName("RightHandSocket"));
+		CharacterState = ECharacterState::ECS_EquippedOneHandedWeapon;
+		OverlappingItem = nullptr; // Prevents equipping a weapon, thats already equipped
+		EquippedWeapon = OverlappingWeapon;
+	}
+	// If the Player can disarm
+	else if (ActionState == EActionState::EAS_Unoccupied && CharacterState != ECharacterState::ECS_Unequipped)
+	{
+		PlayEquipMontage(FName("Unequip"));
+		CharacterState = ECharacterState::ECS_Unequipped;
+	}
+	// If the player can equip the weapon 
+	else if (ActionState == EActionState::EAS_Unoccupied && CharacterState == ECharacterState::ECS_Unequipped && EquippedWeapon)
+	{
+		PlayEquipMontage(FName("Equip"));
 		CharacterState = ECharacterState::ECS_EquippedOneHandedWeapon;
 	}
 }
@@ -126,6 +141,19 @@ void ASlashCharacter::PlayAttackMontage()
 				break;
 			}
 			AnimInstance->Montage_JumpToSection(SectionName, AttackMontage);
+		}
+	}
+}
+
+void ASlashCharacter::PlayEquipMontage(FName SectionName)
+{
+	if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance())
+	{
+		if (EquipMontage)
+		{
+			// Play Montage
+			AnimInstance->Montage_Play(EquipMontage);
+			AnimInstance->Montage_JumpToSection(SectionName, EquipMontage);
 		}
 	}
 }

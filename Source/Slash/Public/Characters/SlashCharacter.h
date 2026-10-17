@@ -8,6 +8,7 @@
 #include  "InputActionValue.h"
 #include "SlashCharacter.generated.h"
 
+class AWeapon;
 class AItem;
 class UInputMappingContext;
 class UInputAction;
@@ -72,6 +73,8 @@ protected:
 	*/
 	void PlayAttackMontage();
 	
+	void PlayEquipMontage(FName SectionName);
+	
 	UFUNCTION(BlueprintCallable)
 	void AttackEnd();
 	
@@ -94,6 +97,12 @@ private:
 	/* Animation Montages */
 	UPROPERTY(EditDefaultsOnly, Category=Montages)
 	UAnimMontage* AttackMontage;
+	
+	UPROPERTY(EditDefaultsOnly, Category=Montages)
+	UAnimMontage* EquipMontage;
+	
+	UPROPERTY(VisibleAnywhere, Category=Weapon)
+	AWeapon* EquippedWeapon;
 	
 public:
 	FORCEINLINE AItem* GetOverlappingItem() const { return OverlappingItem; }
