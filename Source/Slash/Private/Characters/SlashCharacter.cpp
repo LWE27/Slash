@@ -89,10 +89,8 @@ void ASlashCharacter::EKeyPressed(const FInputActionValue& Value)
 void ASlashCharacter::Attack(const FInputActionValue& Value)
 {
 	UE_LOG(LogTemp, Display, TEXT("Attacking"));
-	
-	const bool bCanAttack = ActionState == EActionState::EAS_Unoccupied && CharacterState != ECharacterState::ECS_Unequipped;
-	
-	if (bCanAttack)
+
+	if (ActionState == EActionState::EAS_Unoccupied && CharacterState != ECharacterState::ECS_Unequipped)
 	{
 		PlayAttackMontage();
 		ActionState = EActionState::EAS_Attacking;
