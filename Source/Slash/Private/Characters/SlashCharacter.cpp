@@ -55,8 +55,8 @@ void ASlashCharacter::BeginPlay()
 
 void ASlashCharacter::Move(const FInputActionValue& Value)
 {
-	if (ActionState == EActionState::EAS_Attacking) return;
-	
+	if (ActionState != EActionState::EAS_Unoccupied) return;
+
 	const FVector2D MovementVector = Value.Get<FVector2D>();
 
 	const FRotator Rotation = Controller->GetControlRotation();
@@ -92,12 +92,15 @@ void ASlashCharacter::EKeyPressed(const FInputActionValue& Value)
 	{
 		PlayEquipMontage(FName("Unequip"));
 		CharacterState = ECharacterState::ECS_Unequipped;
+		ActionState = EActionState::EAS_EquippingWeapon;
 	}
 	// If the player can equip the weapon 
-	else if (ActionState == EActionState::EAS_Unoccupied && CharacterState == ECharacterState::ECS_Unequipped && EquippedWeapon)
+	else if (ActionState == EActionState::EAS_Unoccupied && CharacterState == ECharacterState::ECS_Unequipped &&
+		EquippedWeapon)
 	{
 		PlayEquipMontage(FName("Equip"));
 		CharacterState = ECharacterState::ECS_EquippedOneHandedWeapon;
+		ActionState = EActionState::EAS_EquippingWeapon;
 	}
 }
 
@@ -160,6 +163,30 @@ void ASlashCharacter::PlayEquipMontage(FName SectionName)
 
 // Function will be called from the AnimationBlueprint in response to the AnimNotify
 void ASlashCharacter::AttackEnd()
+{
+	ActionState = EActionState::EAS_Unoccupied;
+}
+
+//Will be called by ABP_Echo through AnimNotify_Disarm
+void ASlashCharacter::Disarm()
+{
+	if (EquippedWeapon)
+	{
+		EquippedWeapon->AttachMeshToSocket(GetMesh(), FName("SpineSocket"));
+	}
+}
+
+//Will be called by ABP_Echo through AnimNotify_Arm
+void ASlashCharacter::Arm()
+{
+	if (EquippedWeapon)
+	{
+		EquippedWeapon->AttachMeshToSocket(GetMesh(), FName("RightHandSocket"));
+	}
+}
+
+//Will be called by ABP_Echo through AnimNotify_FinishEquipping
+void ASlashCharacter::FinishEquipping()
 {
 	ActionState = EActionState::EAS_Unoccupied;
 }
