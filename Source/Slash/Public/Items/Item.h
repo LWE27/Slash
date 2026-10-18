@@ -26,6 +26,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 protected:
+	UPROPERTY(VisibleAnywhere)
+	USphereComponent* Sphere;
+	
 	EItemState ItemState = EItemState::EIS_Hovering; // The current default state of the item
 	
 	virtual void BeginPlay() override;
@@ -57,9 +60,6 @@ protected:
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	float RunningTime;
-	
-	UPROPERTY(VisibleAnywhere)
-	USphereComponent* Sphere;
 };
 
 template <typename T>
