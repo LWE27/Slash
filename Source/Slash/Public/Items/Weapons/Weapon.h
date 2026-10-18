@@ -24,10 +24,16 @@ public:
 	void Equip(USceneComponent* InParent, const FName InSocketName);
 	
 protected:
+	
+	virtual void BeginPlay() override;
+	
+	// Sphere Overlap
 	virtual void OnSphereOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
-
 	virtual void OnSphereOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) override;
 
+	UFUNCTION()
+	void OnBoxOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	
 private:
 	//Variable for MetaSoundsSource
 	UPROPERTY(EditAnywhere, Category= "Weapon Properties")
@@ -35,5 +41,10 @@ private:
 	
 	UPROPERTY(EditAnywhere, Category= "Weapon Properties")
 	UBoxComponent* WeaponBox;
-
+	
+	UPROPERTY(VisibleAnywhere)
+	USceneComponent* BoxTraceStart;
+	
+	UPROPERTY(VisibleAnywhere)
+	USceneComponent* BoxTraceEnd;
 };
