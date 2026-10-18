@@ -7,6 +7,7 @@
 #include "Weapon.generated.h"
 
 class USoundBase;
+class UBoxComponent;
 
 /**
  * 
@@ -17,6 +18,8 @@ class SLASH_API AWeapon : public AItem
 	GENERATED_BODY()
 	
 public:
+	AWeapon();
+	
 	void AttachMeshToSocket(USceneComponent* InParent, FName InSocketName);
 	void Equip(USceneComponent* InParent, const FName InSocketName);
 	
@@ -26,9 +29,11 @@ protected:
 	virtual void OnSphereOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) override;
 
 private:
-	
 	//Variable for MetaSoundsSource
 	UPROPERTY(EditAnywhere, Category= "Weapon Properties")
 	USoundBase* EquipSound;
+	
+	UPROPERTY(EditAnywhere, Category= "Weapon Properties")
+	UBoxComponent* WeaponBox;
 
 };

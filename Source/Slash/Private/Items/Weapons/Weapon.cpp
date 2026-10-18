@@ -4,6 +4,14 @@
 #include "Items/Weapons/Weapon.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/SphereComponent.h"
+#include "Components/BoxComponent.h"
+
+AWeapon::AWeapon()
+{
+	// Generate a BoxComponent via Code (for AttackCollision)
+	WeaponBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Weapon Box"));
+	WeaponBox-> SetupAttachment(GetRootComponent());
+}
 
 void AWeapon::AttachMeshToSocket(USceneComponent* InParent, const FName InSocketName)
 {
