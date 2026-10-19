@@ -23,6 +23,8 @@ public:
 	void AttachMeshToSocket(USceneComponent* InParent, FName InSocketName);
 	void Equip(USceneComponent* InParent, const FName InSocketName);
 	
+	FORCEINLINE UBoxComponent* GetWeaponBox() const { return WeaponBox; }
+	
 protected:
 	
 	virtual void BeginPlay() override;
@@ -47,4 +49,6 @@ private:
 	
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* BoxTraceEnd;
+	
+	
 };
