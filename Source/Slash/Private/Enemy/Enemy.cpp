@@ -4,6 +4,7 @@
 #include "Enemy/Enemy.h"
 
 #include "Components/CapsuleComponent.h"
+#include "Slash/DebugMacros.h" // Own Class with Macros for debugging
 
 AEnemy::AEnemy()
 {
@@ -35,5 +36,10 @@ void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void AEnemy::GetHit(const FVector& ImpactLocation)
+{
+	DRAW_SPHERE_COLOR(ImpactLocation, FColor::Blue); // Own Macro
 }
 
