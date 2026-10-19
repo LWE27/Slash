@@ -26,6 +26,19 @@ void AEnemy::BeginPlay()
 	
 }
 
+void AEnemy::PlayHitReactMontage(const FName& SectionName)
+{
+	if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance())
+	{
+		if (HitReactMontage)
+		{
+			// Play Montage
+			AnimInstance->Montage_Play(HitReactMontage);
+			AnimInstance->Montage_JumpToSection(SectionName, HitReactMontage);
+		}
+	}
+}
+
 void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -41,5 +54,6 @@ void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void AEnemy::GetHit(const FVector& ImpactLocation)
 {
 	DRAW_SPHERE_COLOR(ImpactLocation, FColor::Blue); // Own Macro
+	PlayHitReactMontage(FName("FromLeft")); // Temporary hard coded section name
 }
 
