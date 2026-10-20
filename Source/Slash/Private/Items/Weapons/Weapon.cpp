@@ -76,12 +76,12 @@ void AWeapon::OnBoxOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherAct
 	
 	// TArray is a class wrapped around the normal Array, which allows dynamic addition and deletion of entries
 	// Usual C++ Arrays have a fixed size
-	TArray<AActor*> ActorsToIgnore;
-	ActorsToIgnore.Add(this); // Prevents Tracing against own sword
+	//TArray<AActor*> ActorsToIgnore;
+	IgnoreActors.Add(this); // Prevents Tracing against own sword
 	
 	for (AActor* Actor : IgnoreActors)
 	{
-		ActorsToIgnore.AddUnique(Actor);
+		IgnoreActors.AddUnique(Actor);
 	}
 	
 	FHitResult BoxHit;
@@ -94,7 +94,7 @@ void AWeapon::OnBoxOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherAct
 		BoxTraceStart->GetComponentRotation(),
 		ETraceTypeQuery::TraceTypeQuery1,
 		false,
-		ActorsToIgnore,
+		IgnoreActors,
 		EDrawDebugTrace::ForDuration,
 		BoxHit,
 		true //Kinda the same effect as the implemented ActorsToIgnore Array

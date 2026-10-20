@@ -4,6 +4,7 @@
 #include "Enemy/Enemy.h"
 
 #include "Components/CapsuleComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Slash/DebugMacros.h" // Own Class with Macros for debugging
 
@@ -77,30 +78,32 @@ void AEnemy::DirectionalHitReact(const FVector& ImpactLocation)
 	if (Theta >= -45.f && Theta < 45.f)
 	{
 		Section = FName("FromFront");
-	}else if (Theta >= -135.f && Theta < -45.f)
+	}
+	else if (Theta >= -135.f && Theta < -45.f)
 	{
 		Section = FName("FromLeft");
-	}else if (Theta >= 45.f && Theta < 135.f)
+	}
+	else if (Theta >= 45.f && Theta < 135.f)
 	{
 		Section = FName("FromRight");
 	}
 	PlayHitReactMontage(Section);
-	
-	
+
+
 	UKismetSystemLibrary::DrawDebugArrow(this, GetActorLocation(),
-											 GetActorLocation() + CrossProduct * 100.f, 5.f, FColor::Blue, 5.f);
-	
+	                                     GetActorLocation() + CrossProduct * 100.f, 5.f, FColor::Blue, 5.f);
+
 	if (GEngine)
 	{
 		GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Green,
-										 FString::Printf(TEXT("Theta: %f"), Theta));
+		                                 FString::Printf(TEXT("Theta: %f"), Theta));
 	}
 	// Debug Stuff // Draws Arrows
 	UKismetSystemLibrary::DrawDebugArrow(this, GetActorLocation(),
-										 GetActorLocation() + ForwardVector * 60.f, 5.f, FColor::Red, 5.f);
+	                                     GetActorLocation() + ForwardVector * 60.f, 5.f, FColor::Red, 5.f);
 
 	UKismetSystemLibrary::DrawDebugArrow(this, GetActorLocation(),
-										 GetActorLocation() + ToHit * 60.f, 5.f, FColor::Green, 5.f);
+	                                     GetActorLocation() + ToHit * 60.f, 5.f, FColor::Green, 5.f);
 }
 
 void AEnemy::GetHit(const FVector& ImpactLocation)
@@ -108,4 +111,9 @@ void AEnemy::GetHit(const FVector& ImpactLocation)
 	DRAW_SPHERE_COLOR(ImpactLocation, FColor::Blue); // Own Macro
 
 	DirectionalHitReact(ImpactLocation);
+
+	if (HitReactSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, HitReactSound, ImpactLocation);
+	}
 }
