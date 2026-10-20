@@ -20,7 +20,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	
+	void DirectionalHitReact(const FVector& ImpactLocation);
+
 	virtual void GetHit(const FVector& ImpactLocation) override;
 
 private:

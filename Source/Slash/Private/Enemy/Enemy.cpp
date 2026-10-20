@@ -49,10 +49,8 @@ void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-void AEnemy::GetHit(const FVector& ImpactLocation)
+void AEnemy::DirectionalHitReact(const FVector& ImpactLocation)
 {
-	DRAW_SPHERE_COLOR(ImpactLocation, FColor::Blue); // Own Macro
-
 	const FVector ForwardVector = GetActorForwardVector();
 	// Lower Impact Point to the Enemy's Actor Location Z
 	const FVector ImpactLowered(ImpactLocation.X, ImpactLocation.Y, GetActorLocation().Z);
@@ -95,12 +93,19 @@ void AEnemy::GetHit(const FVector& ImpactLocation)
 	if (GEngine)
 	{
 		GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Green,
-		                                 FString::Printf(TEXT("Theta: %f"), Theta));
+										 FString::Printf(TEXT("Theta: %f"), Theta));
 	}
 	// Debug Stuff // Draws Arrows
 	UKismetSystemLibrary::DrawDebugArrow(this, GetActorLocation(),
-	                                     GetActorLocation() + ForwardVector * 60.f, 5.f, FColor::Red, 5.f);
+										 GetActorLocation() + ForwardVector * 60.f, 5.f, FColor::Red, 5.f);
 
 	UKismetSystemLibrary::DrawDebugArrow(this, GetActorLocation(),
-	                                     GetActorLocation() + ToHit * 60.f, 5.f, FColor::Green, 5.f);
+										 GetActorLocation() + ToHit * 60.f, 5.f, FColor::Green, 5.f);
+}
+
+void AEnemy::GetHit(const FVector& ImpactLocation)
+{
+	DRAW_SPHERE_COLOR(ImpactLocation, FColor::Blue); // Own Macro
+
+	DirectionalHitReact(ImpactLocation);
 }

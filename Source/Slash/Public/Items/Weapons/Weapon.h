@@ -20,6 +20,8 @@ class SLASH_API AWeapon : public AItem
 public:
 	AWeapon();
 	
+	TArray<AActor*> IgnoreActors;
+	
 	void AttachMeshToSocket(USceneComponent* InParent, FName InSocketName);
 	void Equip(USceneComponent* InParent, const FName InSocketName);
 	
@@ -49,6 +51,4 @@ private:
 	
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* BoxTraceEnd;
-	
-	
 };

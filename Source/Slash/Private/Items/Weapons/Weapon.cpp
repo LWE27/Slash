@@ -79,6 +79,11 @@ void AWeapon::OnBoxOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherAct
 	TArray<AActor*> ActorsToIgnore;
 	ActorsToIgnore.Add(this); // Prevents Tracing against own sword
 	
+	for (AActor* Actor : IgnoreActors)
+	{
+		ActorsToIgnore.AddUnique(Actor);
+	}
+	
 	FHitResult BoxHit;
 	
 	UKismetSystemLibrary::BoxTraceSingle(
@@ -103,5 +108,6 @@ void AWeapon::OnBoxOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherAct
 		{
 			HitInterface->GetHit(BoxHit.ImpactPoint);
 		}
+		IgnoreActors.AddUnique(BoxHit.GetActor()); // Prevents hitting the same actor twice in one swing
 	}
 }
