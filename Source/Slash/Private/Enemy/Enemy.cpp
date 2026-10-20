@@ -4,6 +4,7 @@
 #include "Enemy/Enemy.h"
 
 #include "Components/CapsuleComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "Slash/DebugMacros.h" // Own Class with Macros for debugging
 
 AEnemy::AEnemy()
@@ -55,5 +56,32 @@ void AEnemy::GetHit(const FVector& ImpactLocation)
 {
 	DRAW_SPHERE_COLOR(ImpactLocation, FColor::Blue); // Own Macro
 	PlayHitReactMontage(FName("FromLeft")); // Temporary hard coded section name
+	
+	const FVector ForwardVector = GetActorForwardVector();
+	// Lower Impact Point to the Enemy's Actor Location Z
+	const FVector ImpactLowered(ImpactLocation.X, ImpactLocation.Y, GetActorLocation().Z);
+	// Get normalized vector from Actor to ImpactLocation 
+	const FVector ToHit = (ImpactLowered - GetActorLocation()).GetSafeNormal(); //GetSafeNormal prevents division by 0
+	
+	// Dot Product -> Forward * ToHit = |Forward| |ToHit| * cos(theta)
+	const double CosTheta = FVector::DotProduct(ForwardVector, ToHit);
+	
+	//Inverse Cosine (Arc-Cosine) of cos(theta) to get theta
+	double Theta = FMath::Acos(CosTheta);
+	
+	// convert from radiance to degrees
+	Theta = FMath::RadiansToDegrees(Theta);
+	
+	if (GEngine)
+	{
+		GEngine -> AddOnScreenDebugMessage(1, 5.f, FColor::Green, 
+			FString::Printf(TEXT("Theta: %f"), Theta));
+	}
+	// Debug Stuff // Draws Arrows
+	UKismetSystemLibrary::DrawDebugArrow(this, GetActorLocation(), 
+		GetActorLocation() + ForwardVector * 60.f, 5.f, FColor::Red, 5.f);
+	
+	UKismetSystemLibrary::DrawDebugArrow(this, GetActorLocation(),
+		GetActorLocation() + ToHit * 60.f, 5.f, FColor::Green, 5.f);
 }
 
