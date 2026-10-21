@@ -95,7 +95,7 @@ void AWeapon::OnBoxOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherAct
 		ETraceTypeQuery::TraceTypeQuery1,
 		false,
 		IgnoreActors,
-		EDrawDebugTrace::ForDuration,
+		EDrawDebugTrace::None,
 		BoxHit,
 		true //Kinda the same effect as the implemented ActorsToIgnore Array
 		);

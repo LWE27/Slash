@@ -90,6 +90,7 @@ void AEnemy::DirectionalHitReact(const FVector& ImpactLocation)
 	PlayHitReactMontage(Section);
 
 
+	/* 
 	UKismetSystemLibrary::DrawDebugArrow(this, GetActorLocation(),
 	                                     GetActorLocation() + CrossProduct * 100.f, 5.f, FColor::Blue, 5.f);
 
@@ -104,16 +105,26 @@ void AEnemy::DirectionalHitReact(const FVector& ImpactLocation)
 
 	UKismetSystemLibrary::DrawDebugArrow(this, GetActorLocation(),
 	                                     GetActorLocation() + ToHit * 60.f, 5.f, FColor::Green, 5.f);
+	                                     
+	*/
 }
 
 void AEnemy::GetHit(const FVector& ImpactLocation)
 {
-	DRAW_SPHERE_COLOR(ImpactLocation, FColor::Blue); // Own Macro
+	//DRAW_SPHERE_COLOR(ImpactLocation, FColor::Blue); // Own Macro
 
 	DirectionalHitReact(ImpactLocation);
 
 	if (HitReactSound)
 	{
 		UGameplayStatics::PlaySoundAtLocation(this, HitReactSound, ImpactLocation);
+	}
+	if (HitReactParticleSystem && GetWorld())
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(
+			GetWorld(),
+			HitReactParticleSystem,
+			ImpactLocation
+		);
 	}
 }

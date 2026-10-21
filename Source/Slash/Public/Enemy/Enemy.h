@@ -27,17 +27,21 @@ public:
 private:
 	
 	/* Animation Montages */
-	UPROPERTY(EditDefaultsOnly, Category=Montages)
+	UPROPERTY(EditDefaultsOnly, Category= Montages)
 	UAnimMontage* HitReactMontage;
 	
 	UPROPERTY(EditAnywhere, Category = Sounds)
 	USoundBase* HitReactSound;
 	
+	// Data type for Cascade-System
+	UPROPERTY(EditAnywhere, Category = VisualEffects)
+	UParticleSystem* HitReactParticleSystem;
+	
 protected:
 	virtual void BeginPlay() override;
 	
 	/**
- * Play Montage Functions
-*/
+	* Play Montage Functions
+	*/
 	void PlayHitReactMontage(const FName& SectionName);
 };
