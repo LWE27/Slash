@@ -26,10 +26,11 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class UCapsuleComponent* Capsule;
 
-private:
 	UPROPERTY(VisibleAnywhere)
 	UGeometryCollectionComponent* GeometryCollection;
-
+private:
 	UPROPERTY(EditAnywhere, Category="Breakable Properties")
 	TArray<TSubclassOf<class ATreasure>> TreasureClasses; // Shorthand Forward Declaration in <> brackets
+
+	bool bBroken = false;
 };

@@ -33,6 +33,10 @@ void ABreakableActor::BeginPlay()
 
 void ABreakableActor::GetHit_Implementation(const FVector& ImpactPoint)
 {
+	//Safety Measure to prevent Infinite Loop when overlapping many BreakableActors
+	if (bBroken) return;
+	bBroken = true;
+	
 	UWorld* World = GetWorld();
 	if (World && TreasureClasses.Num() > 0)
 	{
