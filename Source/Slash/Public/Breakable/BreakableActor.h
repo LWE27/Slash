@@ -13,18 +13,23 @@ UCLASS()
 class SLASH_API ABreakableActor : public AActor, public IHitInterface
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	ABreakableActor();
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void GetHit_Implementation(const FVector& ImpactPoint) override;
+
 protected:
 	virtual void BeginPlay() override;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class UCapsuleComponent* Capsule;
 
 private:
-	
 	UPROPERTY(VisibleAnywhere)
 	UGeometryCollectionComponent* GeometryCollection;
 
-	virtual void GetHit_Implementation(const FVector& ImpactPoint) override;
+	UPROPERTY(EditAnywhere, Category="Breakable Properties")
+	TSubclassOf<class ATreasure> TreasureClass; // Shorthand Forward Declaration in <> brackets
 };
