@@ -38,6 +38,10 @@ protected:
 	UFUNCTION()
 	void OnBoxOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	
+	// Calls the Function through Blueprint and handles the rest in Blueprints
+	UFUNCTION(BlueprintImplementableEvent)
+	void CreateFields(const FVector& FieldLocation);
+	
 private:
 	//Variable for MetaSoundsSource
 	UPROPERTY(EditAnywhere, Category= "Weapon Properties")

@@ -109,5 +109,6 @@ void AWeapon::OnBoxOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherAct
 			HitInterface->GetHit(BoxHit.ImpactPoint);
 		}
 		IgnoreActors.AddUnique(BoxHit.GetActor()); // Prevents hitting the same actor twice in one swing
+		CreateFields(BoxHit.ImpactPoint);
 	}
 }
