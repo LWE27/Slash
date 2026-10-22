@@ -31,5 +31,5 @@ private:
 	UGeometryCollectionComponent* GeometryCollection;
 
 	UPROPERTY(EditAnywhere, Category="Breakable Properties")
-	TSubclassOf<class ATreasure> TreasureClass; // Shorthand Forward Declaration in <> brackets
+	TArray<TSubclassOf<class ATreasure>> TreasureClasses; // Shorthand Forward Declaration in <> brackets
 };
