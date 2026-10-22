@@ -22,7 +22,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	void DirectionalHitReact(const FVector& ImpactLocation);
 
-	virtual void GetHit(const FVector& ImpactLocation) override;
+	virtual void GetHit_Implementation(const FVector& ImpactLocation);
 
 private:
 	

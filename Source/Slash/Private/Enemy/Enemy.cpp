@@ -109,7 +109,7 @@ void AEnemy::DirectionalHitReact(const FVector& ImpactLocation)
 	*/
 }
 
-void AEnemy::GetHit(const FVector& ImpactLocation)
+void AEnemy::GetHit_Implementation(const FVector& ImpactLocation)
 {
 	//DRAW_SPHERE_COLOR(ImpactLocation, FColor::Blue); // Own Macro
 
