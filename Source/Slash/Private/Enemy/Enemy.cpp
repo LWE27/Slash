@@ -37,6 +37,40 @@ void AEnemy::BeginPlay()
 	Super::BeginPlay();
 }
 
+void AEnemy::Die()
+{
+	if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance())
+	{
+		if (DeathMontage)
+		{
+			// Play Montage
+			AnimInstance->Montage_Play(DeathMontage);
+			// Generate Random Number to select played montage
+			const int32 Selection = FMath::RandRange(0, 3);
+
+			FName SectionName = FName();
+			switch (Selection)
+			{
+			case 0:
+				SectionName = FName("Death1");
+				break;
+			case 1:
+				SectionName = FName("Death2");
+				break;
+			case 2:
+				SectionName = FName("Death3");
+				break;
+			case 3:
+				SectionName = FName("Death4");
+				break;
+			default:
+				break;
+			}
+			AnimInstance->Montage_JumpToSection(SectionName, DeathMontage);
+		}
+	}
+}
+
 void AEnemy::PlayHitReactMontage(const FName& SectionName)
 {
 	if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance())
@@ -123,7 +157,15 @@ void AEnemy::GetHit_Implementation(const FVector& ImpactLocation)
 {
 	//DRAW_SPHERE_COLOR(ImpactLocation, FColor::Blue); // Own Macro
 
-	DirectionalHitReact(ImpactLocation);
+	if (AttributeComponent && AttributeComponent->IsAlive())
+	{
+		DirectionalHitReact(ImpactLocation);
+	}
+	else
+	{
+		Die();
+	}
+
 
 	if (HitReactSound)
 	{
@@ -148,7 +190,7 @@ float AEnemy::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEv
 
 		HealthBarWidget->SetHealthPercent(AttributeComponent->GetHealthPercent());
 	}
-	
+
 	return DamageAmount;
 
 	//Remove this line, if the parent functionality shall not be applied

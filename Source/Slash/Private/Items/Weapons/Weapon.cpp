@@ -13,17 +13,17 @@ AWeapon::AWeapon()
 {
 	// Generate a BoxComponent via Code (for AttackCollision)
 	WeaponBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Weapon Box"));
-	WeaponBox-> SetupAttachment(GetRootComponent());
+	WeaponBox->SetupAttachment(GetRootComponent());
 	WeaponBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	// Sets all to Overlap
 	WeaponBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 	// Just sets the Pawn
 	WeaponBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECR_Ignore);
-	
+
 	//Setup Tracepoints
 	BoxTraceStart = CreateDefaultSubobject<USceneComponent>(TEXT("Box Trace Start"));
 	BoxTraceStart->SetupAttachment(GetRootComponent());
-	
+
 	BoxTraceEnd = CreateDefaultSubobject<USceneComponent>(TEXT("Box Trace End"));
 	BoxTraceEnd->SetupAttachment(GetRootComponent());
 }
@@ -45,10 +45,10 @@ void AWeapon::Equip(USceneComponent* InParent, const FName InSocketName, AActor*
 {
 	SetOwner(NewOwner);
 	SetInstigator(NewInstigator);
-	
+
 	AttachMeshToSocket(InParent, InSocketName);
 	ItemState = EItemState::EIS_Equipped;
-	
+
 	if (EquipSound)
 	{
 		UGameplayStatics::PlaySoundAtLocation(this, EquipSound, GetActorLocation());
@@ -76,24 +76,24 @@ void AWeapon::OnSphereOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* Ot
 }
 
 void AWeapon::OnBoxOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                           int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	// Global Coordinates
 	const FVector Start = BoxTraceStart->GetComponentLocation();
 	const FVector End = BoxTraceEnd->GetComponentLocation();
-	
+
 	// TArray is a class wrapped around the normal Array, which allows dynamic addition and deletion of entries
 	// Usual C++ Arrays have a fixed size
 	//TArray<AActor*> ActorsToIgnore;
 	IgnoreActors.Add(this); // Prevents Tracing against own sword
-	
+
 	for (AActor* Actor : IgnoreActors)
 	{
 		IgnoreActors.AddUnique(Actor);
 	}
-	
+
 	FHitResult BoxHit;
-	
+
 	UKismetSystemLibrary::BoxTraceSingle(
 		this,
 		Start,
@@ -106,10 +106,19 @@ void AWeapon::OnBoxOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherAct
 		EDrawDebugTrace::None,
 		BoxHit,
 		true //Kinda the same effect as the implemented ActorsToIgnore Array
-		);
-	
+	);
+
 	if (BoxHit.GetActor())
 	{
+		UGameplayStatics::ApplyDamage(
+			BoxHit.GetActor(),
+			Damage,
+			GetInstigator()->GetController(),
+			// Controller that was responsible for causing this damage (e.g. player who shot the weapon)
+			this,
+			UDamageType::StaticClass()
+		);
+
 		// Cast returns null if the target actor does not inherit the interface
 		IHitInterface* HitInterface = Cast<IHitInterface>(BoxHit.GetActor());
 		if (HitInterface)
@@ -118,13 +127,5 @@ void AWeapon::OnBoxOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherAct
 		}
 		IgnoreActors.AddUnique(BoxHit.GetActor()); // Prevents hitting the same actor twice in one swing
 		CreateFields(BoxHit.ImpactPoint);
-		
-		UGameplayStatics::ApplyDamage(
-			BoxHit.GetActor(),
-			Damage,
-			GetInstigator()->GetController(), // Controller that was responsible for causing this damage (e.g. player who shot the weapon)
-			this,
-			UDamageType::StaticClass()
-			);
 	}
 }
