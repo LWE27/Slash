@@ -24,10 +24,10 @@ AEnemy::AEnemy()
 	// Configure Camera to ignore Mesh (prevents camera blocking)
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
-	
+
 	AttributeComponent = CreateDefaultSubobject<UAttributeComponent>(TEXT("AttributeComponent"));
 	// Man muss es nirgends anbringen/attach, da es kein Mesh oder ähnliches besitzt
-	
+
 	HealthBarWidget = CreateDefaultSubobject<UHealthBarComponent>("HealthBarWidget");
 	HealthBarWidget->SetupAttachment(GetRootComponent());
 }
@@ -35,11 +35,6 @@ AEnemy::AEnemy()
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	if (HealthBarWidget)
-	{
-		HealthBarWidget->SetHealthPercent(.75f);
-	}
 }
 
 void AEnemy::PlayHitReactMontage(const FName& SectionName)
@@ -142,4 +137,20 @@ void AEnemy::GetHit_Implementation(const FVector& ImpactLocation)
 			ImpactLocation
 		);
 	}
+}
+
+float AEnemy::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator,
+                         AActor* DamageCauser)
+{
+	if (AttributeComponent && HealthBarWidget)
+	{
+		AttributeComponent->ReceiveDamage(DamageAmount);
+
+		HealthBarWidget->SetHealthPercent(AttributeComponent->GetHealthPercent());
+	}
+	
+	return DamageAmount;
+
+	//Remove this line, if the parent functionality shall not be applied
+	//return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }

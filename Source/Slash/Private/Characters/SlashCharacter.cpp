@@ -83,7 +83,8 @@ void ASlashCharacter::EKeyPressed(const FInputActionValue& Value)
 	// If weapon to pick up is nearby
 	if (AWeapon* OverlappingWeapon = Cast<AWeapon>(OverlappingItem))
 	{
-		OverlappingWeapon->Equip(GetMesh(), FName("RightHandSocket"));
+		OverlappingWeapon->Equip(GetMesh(), FName("RightHandSocket"), this, this);
+
 		CharacterState = ECharacterState::ECS_EquippedOneHandedWeapon;
 		OverlappingItem = nullptr; // Prevents equipping a weapon, thats already equipped
 		EquippedWeapon = OverlappingWeapon;

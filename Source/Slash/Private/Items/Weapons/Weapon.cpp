@@ -41,8 +41,11 @@ void AWeapon::AttachMeshToSocket(USceneComponent* InParent, const FName InSocket
 	ItemMesh->AttachToComponent(InParent, TransformRules, InSocketName);
 }
 
-void AWeapon::Equip(USceneComponent* InParent, const FName InSocketName)
+void AWeapon::Equip(USceneComponent* InParent, const FName InSocketName, AActor* NewOwner, APawn* NewInstigator)
 {
+	SetOwner(NewOwner);
+	SetInstigator(NewInstigator);
+	
 	AttachMeshToSocket(InParent, InSocketName);
 	ItemState = EItemState::EIS_Equipped;
 	
@@ -115,5 +118,13 @@ void AWeapon::OnBoxOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherAct
 		}
 		IgnoreActors.AddUnique(BoxHit.GetActor()); // Prevents hitting the same actor twice in one swing
 		CreateFields(BoxHit.ImpactPoint);
+		
+		UGameplayStatics::ApplyDamage(
+			BoxHit.GetActor(),
+			Damage,
+			GetInstigator()->GetController(), // Controller that was responsible for causing this damage (e.g. player who shot the weapon)
+			this,
+			UDamageType::StaticClass()
+			);
 	}
 }

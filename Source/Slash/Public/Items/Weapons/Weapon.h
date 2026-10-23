@@ -23,7 +23,7 @@ public:
 	TArray<AActor*> IgnoreActors;
 	
 	void AttachMeshToSocket(USceneComponent* InParent, FName InSocketName);
-	void Equip(USceneComponent* InParent, const FName InSocketName);
+	void Equip(USceneComponent* InParent, const FName InSocketName, AActor* NewOwner, APawn* NewInstigator);
 	
 	FORCEINLINE UBoxComponent* GetWeaponBox() const { return WeaponBox; }
 	
@@ -55,4 +55,7 @@ private:
 	
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* BoxTraceEnd;
+	
+	UPROPERTY(EditAnywhere)
+	float Damage = 20.f;
 };
