@@ -57,6 +57,10 @@ protected:
 
 	UFUNCTION()
 	virtual void OnSphereOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	UPROPERTY(EditAnywhere, Category= "Particle Effects")
+	class UNiagaraComponent* EmbersEffect;
+	
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	float RunningTime;

@@ -6,6 +6,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Components/SphereComponent.h"
 #include "Components/BoxComponent.h"
+#include "NiagaraComponent.h"
 #include "Interfaces/HitInterface.h"
 
 AWeapon::AWeapon()
@@ -52,6 +53,10 @@ void AWeapon::Equip(USceneComponent* InParent, const FName InSocketName)
 	if (Sphere)
 	{
 		Sphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
+	if (EmbersEffect)
+	{
+		EmbersEffect->Deactivate(); // Deactivates Particle Effect Upon Equipping
 	}
 }
 

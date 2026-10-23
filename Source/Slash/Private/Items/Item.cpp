@@ -3,6 +3,7 @@
 
 #include "Items/Item.h"
 
+#include "NiagaraComponent.h"
 #include "Characters/SlashCharacter.h"
 #include "Components/SphereComponent.h"
 
@@ -18,6 +19,10 @@ AItem::AItem()
 	//Creates Sphere, containing the delegates
 	Sphere = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 	Sphere->SetupAttachment(GetRootComponent());
+	
+	// Setup Particle Effect
+	EmbersEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("EmbersEffect"));
+	EmbersEffect->SetupAttachment(GetRootComponent());
 }
 
 void AItem::BeginPlay()
