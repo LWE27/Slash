@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Interfaces/HitInterface.h"
+#include "Characters/ECS_CharacterStates.h"
 #include "Enemy.generated.h"
 
 class UHealthBarComponent;
@@ -51,6 +52,9 @@ private:
 	
 protected:
 	virtual void BeginPlay() override;
+	
+	UPROPERTY(BlueprintReadOnly)
+	EDeathPose DeathPose = EDeathPose::EDP_Alive;
 	
 	void Die();
 	
