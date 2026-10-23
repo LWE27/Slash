@@ -6,11 +6,12 @@
 #include "Components/AttributeComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/WidgetComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "HUD/HealthBarComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Slash/DebugMacros.h" // Own Class with Macros for debugging
-
+#include "GameFramework/CharacterMovementComponent.h"
 
 AEnemy::AEnemy()
 {
@@ -30,6 +31,12 @@ AEnemy::AEnemy()
 
 	HealthBarWidget = CreateDefaultSubobject<UHealthBarComponent>("HealthBarWidget");
 	HealthBarWidget->SetupAttachment(GetRootComponent());
+
+	// Configure Rotation while performing running animation
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
 }
 
 void AEnemy::BeginPlay()
@@ -43,7 +50,6 @@ void AEnemy::BeginPlay()
 
 void AEnemy::Die()
 {
-	
 	if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance())
 	{
 		if (DeathMontage)
@@ -83,7 +89,7 @@ void AEnemy::Die()
 	{
 		HealthBarWidget->SetVisibility(false);
 	}
-	
+
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	SetLifeSpan(3.f);
 }
