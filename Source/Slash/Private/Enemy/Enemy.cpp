@@ -5,6 +5,7 @@
 
 #include "Components/AttributeComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/WidgetComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Slash/DebugMacros.h" // Own Class with Macros for debugging
@@ -25,6 +26,9 @@ AEnemy::AEnemy()
 	
 	AttributeComponent = CreateDefaultSubobject<UAttributeComponent>(TEXT("AttributeComponent"));
 	// Man muss es nirgends anbringen/attach, da es kein Mesh oder ähnliches besitzt
+	
+	HealthBarWidget = CreateDefaultSubobject<UWidgetComponent>("HealthBarWidget");
+	HealthBarWidget->SetupAttachment(GetRootComponent());
 }
 
 void AEnemy::BeginPlay()
