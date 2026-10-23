@@ -8,6 +8,7 @@
 #include "Enemy.generated.h"
 
 class UAnimMontage;
+class UAttributeComponent;
 
 UCLASS()
 class SLASH_API AEnemy : public ACharacter, public IHitInterface
@@ -25,6 +26,8 @@ public:
 	virtual void GetHit_Implementation(const FVector& ImpactLocation);
 
 private:
+	UPROPERTY(VisibleAnywhere)
+	UAttributeComponent* AttributeComponent;
 	
 	/* Animation Montages */
 	UPROPERTY(EditDefaultsOnly, Category= Montages)

@@ -3,10 +3,12 @@
 
 #include "Enemy/Enemy.h"
 
+#include "Components/AttributeComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Slash/DebugMacros.h" // Own Class with Macros for debugging
+
 
 AEnemy::AEnemy()
 {
@@ -20,6 +22,9 @@ AEnemy::AEnemy()
 	// Configure Camera to ignore Mesh (prevents camera blocking)
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
+	
+	AttributeComponent = CreateDefaultSubobject<UAttributeComponent>(TEXT("AttributeComponent"));
+	// Man muss es nirgends anbringen/attach, da es kein Mesh oder ähnliches besitzt
 }
 
 void AEnemy::BeginPlay()
