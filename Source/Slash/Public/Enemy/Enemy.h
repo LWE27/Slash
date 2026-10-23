@@ -50,6 +50,12 @@ private:
 	UPROPERTY(EditAnywhere, Category = VisualEffects)
 	UParticleSystem* HitReactParticleSystem;
 	
+	UPROPERTY(VisibleAnywhere, Category = Combat)
+	AActor* CombatTarget;
+	
+	UPROPERTY(EditAnywhere, Category=Combat)
+	double CombatRadius = 500.f;
+	
 protected:
 	virtual void BeginPlay() override;
 	
